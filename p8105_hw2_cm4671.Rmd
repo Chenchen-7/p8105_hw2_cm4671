@@ -10,7 +10,7 @@ date: "2025-09-25"
 library(dplyr)
 library(tidyr)
 pols_month_df <- read.csv(
-  "~/Desktop/STA-HW/p8105_hw2_cm4671/fivethirtyeight_datasets/pols-month.csv",
+  "~/Desktop/STA-HW/p8105_hw2_cm4671/Data/pols-month.csv",
   na = c("NA", ".", "")) |>
   janitor::clean_names() |>
   separate(mon, into = c("year", "month", "day"), sep = "-") |>
@@ -26,7 +26,7 @@ pols_month_df <- read.csv(
 ### For snp.csv
 ```{r}
 snp_df <- read.csv(
-  "~/Desktop/STA-HW/p8105_hw2_cm4671/fivethirtyeight_datasets/snp.csv",
+  "~/Desktop/STA-HW/p8105_hw2_cm4671/Data/snp.csv",
   na = c("NA", ".", "")) |>
   janitor::clean_names() |>
   separate(date, into = c("month", "date", "year"), sep = "/") |>
@@ -45,7 +45,7 @@ snp_df <- snp_df |>
 ```{r}
 library(janitor)
 unemployment_df <- read.csv(
-  "~/Desktop/STA-HW/p8105_hw2_cm4671/fivethirtyeight_datasets/unemployment.csv",
+  "~/Desktop/STA-HW/p8105_hw2_cm4671/Data/unemployment.csv",
   na = c("NA", ".", "")
 ) |>
   janitor::clean_names() |>
@@ -82,7 +82,7 @@ The unemployment dataset has the range of time from January 1948 to December 201
 ```{r}
 library(readxl)
 mr_trash_df <- read_excel(
-  "~/Desktop/STA-HW/p8105_hw2_cm4671/202409 Trash Wheel Collection Data.xlsx",
+  "~/Desktop/STA-HW/p8105_hw2_cm4671/Data/202409 Trash Wheel Collection Data.xlsx",
   sheet = "Mr. Trash Wheel",
   skip = 1,
   col_names = TRUE
@@ -97,7 +97,7 @@ mr_trash_df <- mr_trash_df |>
 
 ```{r}
 p_trash_df <- read_excel(
-  "~/Desktop/STA-HW/p8105_hw2_cm4671/202409 Trash Wheel Collection Data.xlsx",
+  "~/Desktop/STA-HW/p8105_hw2_cm4671/Data/202409 Trash Wheel Collection Data.xlsx",
   sheet = "Professor Trash Wheel",
   skip = 1,
   col_names = TRUE
@@ -108,7 +108,7 @@ p_trash_df <- read_excel(
 
 ```{r}
 gwynnda_trash_df <- read_excel(
-  "~/Desktop/STA-HW/p8105_hw2_cm4671/202409 Trash Wheel Collection Data.xlsx",
+  "~/Desktop/STA-HW/p8105_hw2_cm4671/Data/202409 Trash Wheel Collection Data.xlsx",
   sheet = "Gwynnda Trash Wheel",
   skip = 1,
   col_names = TRUE
@@ -157,11 +157,11 @@ The trash_wheel_df contains `r nrow(trash_wheel_df)` observations from Mr. Trash
 ```{r}
 library(tidyverse)
 Zip_Codes <- read.csv(
-  "~/Desktop/STA-HW/p8105_hw2_cm4671/zillow_data/Zip Codes.csv",
+  "~/Desktop/STA-HW/p8105_hw2_cm4671/Data/Zip Codes.csv",
   na = c("NA", ".", "")) |>
   janitor::clean_names()
 Zori <- read.csv(
-  "~/Desktop/STA-HW/p8105_hw2_cm4671/zillow_data/Zip_zori_uc_sfrcondomfr_sm_month_NYC.csv", 
+  "~/Desktop/STA-HW/p8105_hw2_cm4671/Data/Zip_zori_uc_sfrcondomfr_sm_month_NYC.csv", 
   na = c("NA", ".", "")) |>
   janitor::clean_names()
 ```
