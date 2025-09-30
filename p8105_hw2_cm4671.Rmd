@@ -151,7 +151,7 @@ gwynnda_cigs <- trash_wheel_df |>
 gwynnda_cigs
 ```
 
-The trash_wheel_df contains `r nrow(trash_wheel_df)` observations from Mr. Trash Wheel, Professor Trash Wheel, and Gwynnda Trash Wheel. Each observation corresponds to a dumpster load of trash and includes variables such as the date, dumpster number, weight (in tons), and counts of specific items like plastic bottles, cigarette butts, and glass bottles. For example, one row records both the total trash weight and the number of cigarette butts collected on that date. Across all available data, Professor Trash Wheel has collected a total of `r sum(trash_wheel_df$weight[trash_wheel_df$wheel == "Professor Trash Wheel"])` tons of trash. In addition, Gwynnda collected `r sum(trash_wheel_df$cig_butts[trash_wheel_df$wheel == "Gwynnda Trash Wheel" & format(date, "%Y-%m") == "2022-06"])` cigarette butts in June 2022 alone.
+The trash_wheel_df contains `r nrow(trash_wheel_df)` observations from Mr. Trash Wheel, Professor Trash Wheel, and Gwynnda Trash Wheel. Each observation corresponds to a dumpster load of trash and includes variables such as the date, dumpster number, weight (in tons), and counts of specific items like plastic bottles, cigarette butts, and glass bottles. For example, one row records both the total trash weight and the number of cigarette butts collected on that date. Across all available data, Professor Trash Wheel has collected a total of `r sum(trash_wheel_df$weight[trash_wheel_df$wheel == "Professor Trash Wheel"])` tons of trash. In addition, Gwynns Falls collected `r sum(trash_wheel_df$cig_butts[trash_wheel_df$wheel == "Gwynns Falls Trash Wheel" & format(date, "%Y-%m") == "2022-06"])` cigarette butts in June 2022 alone.
 
 # Problem 3
 ```{r}
