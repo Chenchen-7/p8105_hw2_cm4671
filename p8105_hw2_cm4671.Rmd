@@ -82,7 +82,7 @@ The unemployment dataset has the range of time from January 1948 to December 201
 ```{r}
 library(readxl)
 mr_trash_df <- read_excel(
-  "~/Desktop/STA-HW/p8105_hw2_cm4671/Data/202409 Trash Wheel Collection Data.xlsx",
+  "~/Desktop/STA-HW/p8105_hw2_cm4671/Data/202509 Trash Wheel Collection Data.xlsx",
   sheet = "Mr. Trash Wheel",
   skip = 1,
   col_names = TRUE
@@ -97,7 +97,7 @@ mr_trash_df <- mr_trash_df |>
 
 ```{r}
 p_trash_df <- read_excel(
-  "~/Desktop/STA-HW/p8105_hw2_cm4671/Data/202409 Trash Wheel Collection Data.xlsx",
+  "~/Desktop/STA-HW/p8105_hw2_cm4671/Data/202509 Trash Wheel Collection Data.xlsx",
   sheet = "Professor Trash Wheel",
   skip = 1,
   col_names = TRUE
@@ -108,8 +108,8 @@ p_trash_df <- read_excel(
 
 ```{r}
 gwynnda_trash_df <- read_excel(
-  "~/Desktop/STA-HW/p8105_hw2_cm4671/Data/202409 Trash Wheel Collection Data.xlsx",
-  sheet = "Gwynnda Trash Wheel",
+  "~/Desktop/STA-HW/p8105_hw2_cm4671/Data/202509 Trash Wheel Collection Data.xlsx",
+  sheet = "Gwynns Falls Trash Wheel",
   skip = 1,
   col_names = TRUE
 ) |>
@@ -128,7 +128,7 @@ p_trash_df <- p_trash_df |>
   mutate(Wheel = "Professor Trash Wheel")
 
 gwynnda_trash_df <- gwynnda_trash_df |> 
-  mutate(Wheel = "Gwynnda Trash Wheel")
+  mutate(Wheel = "Gwynns Falls Trash Wheel")
 
 trash_wheel_df <- bind_rows(mr_trash_df, p_trash_df,gwynnda_trash_df)
 ```
