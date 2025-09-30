@@ -1,0 +1,252 @@
+---
+title: "P8105_hw2_cm4671"
+output: github_document
+date: "2025-09-25"
+---
+
+# Problem 1
+### For pols-month.csv
+```{r}
+library(dplyr)
+library(tidyr)
+pols_month_df <- read.csv(
+  "~/Desktop/STA-HW/p8105_hw2_cm4671/fivethirtyeight_datasets/pols-month.csv",
+  na = c("NA", ".", "")) |>
+  janitor::clean_names() |>
+  separate(mon, into = c("year", "month", "day"), sep = "-") |>
+  mutate(
+    year = as.integer(year),
+    month = as.integer(month),
+    month = month.name[month],
+    president = if_else(prez_gop == 1, "gop", "dem")
+  ) |>
+  select(-day, -prez_gop, -prez_dem)
+```
+
+### For snp.csv
+```{r}
+snp_df <- read.csv(
+  "~/Desktop/STA-HW/p8105_hw2_cm4671/fivethirtyeight_datasets/snp.csv",
+  na = c("NA", ".", "")) |>
+  janitor::clean_names() |>
+  separate(date, into = c("month", "date", "year"), sep = "/") |>
+  mutate(
+    year = as.integer(year),
+    year = if_else(year > 25, 1900 + year, 2000 + year),
+    month = as.integer(month)
+  ) |>
+  select(year, month, close) |>
+  arrange(year, month) 
+snp_df <- snp_df |>
+  mutate(month = month.name[month])
+```
+
+### For unemployment.csv
+```{r}
+library(janitor)
+unemployment_df <- read.csv(
+  "~/Desktop/STA-HW/p8105_hw2_cm4671/fivethirtyeight_datasets/unemployment.csv",
+  na = c("NA", ".", "")
+) |>
+  janitor::clean_names() |>
+  pivot_longer(
+    cols = jan:dec,
+    names_to = "month",
+    values_to = "unemployment_rate"
+  )
+unemployment_df <- unemployment_df |>
+  mutate(
+    month_num = match(month, c("jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec")),
+    month = month.name[month_num]
+  ) |>
+  arrange(year, month_num) |>
+  select(-month_num)
+```
+
+## Merge dataset
+```{r}
+merged_data <- pols_month_df |>
+  left_join(snp_df, by = c("year", "month")) |>
+  left_join(unemployment_df, by = c("year", "month"))
+```
+
+## Short summary
+The dataset of pols-month has the range of time from January 1947 to June 2015. This dataset contains date of the count, the number of republican governors on the associated date, the number of republican senators on the associated date, the number of republican representatives on the associated date, the number of democratic governors on the associated date, the number of democratic senators on the associated date, the number of democratic representatives on the associated date, and whether the president was Democratic or Republican.
+
+The snap dataset has the range of time from January 1950 to July 2015. This dataset contains date and the closing values of the S&P stock index on the associated date.
+
+The unemployment dataset has the range of time from January 1948 to December 2015. This dataset contains date and monthly U.S. unemployment rates.
+
+# Problem 2
+
+```{r}
+library(readxl)
+mr_trash_df <- read_excel(
+  "~/Desktop/STA-HW/p8105_hw2_cm4671/202409 Trash Wheel Collection Data.xlsx",
+  sheet = "Mr. Trash Wheel",
+  skip = 1,
+  col_names = TRUE
+) |>
+  select(1:14) |>
+  filter(!is.na(Dumpster)) 
+mr_trash_df <- mr_trash_df |>
+  rename(Sports = `Sports Balls`) |>
+  mutate(Sports = as.integer(round(Sports, 0)))
+
+```
+
+```{r}
+p_trash_df <- read_excel(
+  "~/Desktop/STA-HW/p8105_hw2_cm4671/202409 Trash Wheel Collection Data.xlsx",
+  sheet = "Professor Trash Wheel",
+  skip = 1,
+  col_names = TRUE
+) |>
+  select(1:13) |>
+  filter(!is.na(Dumpster))
+```
+
+```{r}
+gwynnda_trash_df <- read_excel(
+  "~/Desktop/STA-HW/p8105_hw2_cm4671/202409 Trash Wheel Collection Data.xlsx",
+  sheet = "Gwynnda Trash Wheel",
+  skip = 1,
+  col_names = TRUE
+) |>
+  select(1:12) |>
+  filter(!is.na(Dumpster))
+```
+
+```{r}
+mr_trash_df <- mr_trash_df |> mutate(Year = as.integer(Year))
+p_trash_df <- p_trash_df |> mutate(Year = as.integer(Year))
+gwynnda_trash_df <- gwynnda_trash_df |> mutate(Year = as.integer(Year))
+mr_trash_df <- mr_trash_df |> 
+  mutate(Wheel = "Mr. Trash Wheel")
+
+p_trash_df <- p_trash_df |> 
+  mutate(Wheel = "Professor Trash Wheel")
+
+gwynnda_trash_df <- gwynnda_trash_df |> 
+  mutate(Wheel = "Gwynnda Trash Wheel")
+
+trash_wheel_df <- bind_rows(mr_trash_df, p_trash_df,gwynnda_trash_df)
+```
+
+```{r}
+# To find the number of observations
+n_obs <- nrow(trash_wheel_df)
+n_obs
+# Total weight of trash collected by Professor Trash Wheel
+prof_weight <- trash_wheel_df |>
+  filter(Wheel == "Professor Trash Wheel") |>
+  summarise(total_weight = sum(`Weight (tons)`, na.rm = TRUE))
+prof_weight
+# Total number of cigarette butts collected by Gwynnda in June of 2022
+gwynnda_cigs <- trash_wheel_df |>
+  filter(Wheel == "Gwynnda Trash Wheel",
+         Year == 2022,
+         Month == "June") |>
+  summarise(total_cigs = sum(`Cigarette Butts`, na.rm = TRUE))
+gwynnda_cigs
+```
+
+The trash_wheel_df contains `r nrow(trash_wheel_df)` observations from Mr. Trash Wheel, Professor Trash Wheel, and Gwynnda Trash Wheel. Each observation corresponds to a dumpster load of trash and includes variables such as the date, dumpster number, weight (in tons), and counts of specific items like plastic bottles, cigarette butts, and glass bottles. For example, one row records both the total trash weight and the number of cigarette butts collected on that date. Across all available data, Professor Trash Wheel has collected a total of `r sum(trash_wheel_df$weight[trash_wheel_df$wheel == "Professor Trash Wheel"])` tons of trash. In addition, Gwynnda collected `r sum(trash_wheel_df$cig_butts[trash_wheel_df$wheel == "Gwynnda Trash Wheel" & format(date, "%Y-%m") == "2022-06"])` cigarette butts in June 2022 alone.
+
+# Problem 3
+```{r}
+library(tidyverse)
+Zip_Codes <- read.csv(
+  "~/Desktop/STA-HW/p8105_hw2_cm4671/zillow_data/Zip Codes.csv",
+  na = c("NA", ".", "")) |>
+  janitor::clean_names()
+Zori <- read.csv(
+  "~/Desktop/STA-HW/p8105_hw2_cm4671/zillow_data/Zip_zori_uc_sfrcondomfr_sm_month_NYC.csv", 
+  na = c("NA", ".", "")) |>
+  janitor::clean_names()
+```
+
+```{r}
+Zip_Codes <- Zip_Codes |>
+  mutate(zip_code = as.character(zip_code))
+Zori <- Zori |>
+  mutate(region_name = as.character(region_name))
+glimpse(Zip_Codes)
+glimpse(Zori)
+```
+
+```{r}
+zori_long <- Zori |>
+  pivot_longer(
+    cols = starts_with("x"),
+    names_to = "date",
+    values_to = "zori"
+  ) |>
+  mutate(
+    date = as.Date(sub("x", "", date), format = "%Y_%m_%d")
+  )
+```
+
+```{r}
+#Checking
+n_zips <- n_distinct(Zori$region_name)
+n_months <- n_distinct(zori_long$date)
+message("n_zips = ", n_zips, "; n_months = ", n_months,
+        "; tidy rows = ", nrow(zori_long),
+        " (expected n_zips * n_months = ", n_zips * n_months, ")")
+
+# check dates present (so we know which day-of-month exists for Jan 2020/2021)
+range(zori_long$date, na.rm = TRUE)
+sort(unique(zori_long$date))[1:10]
+tail(sort(unique(zori_long$date)), 10) 
+```
+
+
+```{r}
+nyc_rent <- zori_long |>
+  left_join(Zip_Codes, by = c("region_name" = "zip_code")) |>
+  arrange(region_name, date)
+```
+
+```{r}
+n_obs   <- nrow(nyc_rent)
+n_zips  <- n_distinct(nyc_rent$region_name)
+n_neigh <- n_distinct(nyc_rent$neighborhood)
+
+n_obs; n_zips; n_neigh
+```
+From the data above, we know that there are 17516 observations in total, 149 unique ZIP codes and 43 unique neighborhoods.
+
+```{r}
+# ZIPs present in the neighborhood dataset but missing from Zillow
+zip_only_in_info <- setdiff(Zip_Codes$zip_code, Zori$region_name)
+
+length(zip_only_in_info)
+head(zip_only_in_info, 10)
+```
+There are 171 zip codes appear in the ZIP code dataset but not in the Zillow Rental Price dataset. And here are ten examples. This situation may occur because these zip codes belong to non-residential zip codes, such as commercial areas, industrial areas, and public areas. Or the data is too scarce and there are very few houses for sale.
+
+```{r}
+zori_2020 <- nyc_rent |>
+  filter(date == as.Date("2020-01-31")) |>
+  select(zip = region_name, zori_2020 = zori)
+
+zori_2021 <- nyc_rent |>
+  filter(date == as.Date("2021-01-31")) |>
+  select(zip = region_name, zori_2021 = zori)
+
+rent_change <- zori_2020 |>
+  inner_join(zori_2021, by = "zip") |>
+  left_join(Zip_Codes |> select(zip_code, county, neighborhood),
+            by = c("zip" = "zip_code")) |>
+  mutate(change = zori_2021 - zori_2020)
+
+top10_drops <- rent_change |>
+  arrange(change) |>
+  slice(1:10) |>
+  select(zip, county, neighborhood, zori_2020, zori_2021, change)
+
+top10_drops
+```
+The table above shows the 10 postal codes with the greatest decline in rent from January 2020 to January 2021. All these zip codes are in Manhattan, including communities such as Lower Manhattan, the Lower East Side, Gracie Park, Chelsea and Soho. The decline of ZORI ranged from -685 dollars to -913 dollars. These patterns reflect the disproportionate impact of the pandemic on the high-rent areas in the center of Manhattan, where demand has declined due to remote work, the relocation of residents, and the collapse of tourism and short-term rentals. In contrast, the postal codes in many suburbs experienced a minor decline or remained relatively stable during this period.
+
