@@ -10,7 +10,7 @@ date: "2025-09-25"
 library(dplyr)
 library(tidyr)
 pols_month_df <- read.csv(
-  "~/Desktop/STA-HW/p8105_hw2_cm4671/Data/pols-month.csv",
+  "Data/pols-month.csv",
   na = c("NA", ".", "")) |>
   janitor::clean_names() |>
   separate(mon, into = c("year", "month", "day"), sep = "-") |>
@@ -26,7 +26,7 @@ pols_month_df <- read.csv(
 ### For snp.csv
 ```{r}
 snp_df <- read.csv(
-  "~/Desktop/STA-HW/p8105_hw2_cm4671/Data/snp.csv",
+  "Data/snp.csv",
   na = c("NA", ".", "")) |>
   janitor::clean_names() |>
   separate(date, into = c("month", "date", "year"), sep = "/") |>
@@ -45,7 +45,7 @@ snp_df <- snp_df |>
 ```{r}
 library(janitor)
 unemployment_df <- read.csv(
-  "~/Desktop/STA-HW/p8105_hw2_cm4671/Data/unemployment.csv",
+  "Data/unemployment.csv",
   na = c("NA", ".", "")
 ) |>
   janitor::clean_names() |>
@@ -82,7 +82,7 @@ The unemployment dataset has the range of time from January 1948 to December 201
 ```{r}
 library(readxl)
 mr_trash_df <- read_excel(
-  "~/Desktop/STA-HW/p8105_hw2_cm4671/Data/202509 Trash Wheel Collection Data.xlsx",
+  "Data/202509 Trash Wheel Collection Data.xlsx",
   sheet = "Mr. Trash Wheel",
   skip = 1,
   col_names = TRUE
@@ -97,7 +97,7 @@ mr_trash_df <- mr_trash_df |>
 
 ```{r}
 p_trash_df <- read_excel(
-  "~/Desktop/STA-HW/p8105_hw2_cm4671/Data/202509 Trash Wheel Collection Data.xlsx",
+  "Data/202509 Trash Wheel Collection Data.xlsx",
   sheet = "Professor Trash Wheel",
   skip = 1,
   col_names = TRUE
@@ -108,7 +108,7 @@ p_trash_df <- read_excel(
 
 ```{r}
 gwynnda_trash_df <- read_excel(
-  "~/Desktop/STA-HW/p8105_hw2_cm4671/Data/202509 Trash Wheel Collection Data.xlsx",
+  "Data/202509 Trash Wheel Collection Data.xlsx",
   sheet = "Gwynns Falls Trash Wheel",
   skip = 1,
   col_names = TRUE
@@ -144,7 +144,7 @@ prof_weight <- trash_wheel_df |>
 prof_weight
 # Total number of cigarette butts collected by Gwynnda in June of 2022
 gwynnda_cigs <- trash_wheel_df |>
-  filter(Wheel == "Gwynnda Trash Wheel",
+  filter(Wheel == "Gwynns Falls Trash Wheel",
          Year == 2022,
          Month == "June") |>
   summarise(total_cigs = sum(`Cigarette Butts`, na.rm = TRUE))
@@ -157,11 +157,11 @@ The trash_wheel_df contains `r nrow(trash_wheel_df)` observations from Mr. Trash
 ```{r}
 library(tidyverse)
 Zip_Codes <- read.csv(
-  "~/Desktop/STA-HW/p8105_hw2_cm4671/Data/Zip Codes.csv",
+  "Data/Zip Codes.csv",
   na = c("NA", ".", "")) |>
   janitor::clean_names()
 Zori <- read.csv(
-  "~/Desktop/STA-HW/p8105_hw2_cm4671/Data/Zip_zori_uc_sfrcondomfr_sm_month_NYC.csv", 
+  "Data/Zip_zori_uc_sfrcondomfr_sm_month_NYC.csv", 
   na = c("NA", ".", "")) |>
   janitor::clean_names()
 ```
@@ -200,6 +200,8 @@ range(zori_long$date, na.rm = TRUE)
 sort(unique(zori_long$date))[1:10]
 tail(sort(unique(zori_long$date)), 10) 
 ```
+
+
 
 
 ```{r}
@@ -249,4 +251,29 @@ top10_drops <- rent_change |>
 top10_drops
 ```
 The table above shows the 10 postal codes with the greatest decline in rent from January 2020 to January 2021. All these zip codes are in Manhattan, including communities such as Lower Manhattan, the Lower East Side, Gracie Park, Chelsea and Soho. The decline of ZORI ranged from -685 dollars to -913 dollars. These patterns reflect the disproportionate impact of the pandemic on the high-rent areas in the center of Manhattan, where demand has declined due to remote work, the relocation of residents, and the collapse of tourism and short-term rentals. In contrast, the postal codes in many suburbs experienced a minor decline or remained relatively stable during this period.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
